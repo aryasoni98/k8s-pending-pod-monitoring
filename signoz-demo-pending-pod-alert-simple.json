@@ -81,7 +81,7 @@
     "channels": [
       {
         "type": "slack",
-        "webhook_url": "https://hooks.slack.com/services/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",
+        "webhook_url": "<webhook>",
         "message": "🚨 **Pod Stuck in Pending Alert**\n\n**Namespace:** signoz-demo\n**Pod:** {{.k8s.pod.name}}\n**Duration:** Over 5 minutes\n**Status:** Pending\n**Time:** {{.timestamp}}\n\nPlease check the pod status and resolve the scheduling issue.",
         "title": "Pod Stuck in Pending - signoz-demo"
       }
