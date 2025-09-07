@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: otelcontribcol
+  namespace: signoz-demo
+  labels:
+    app: otelcontribcol
+data:
+  config.yaml: |
+    receivers:
+      k8s_cluster:
+        collection_interval: 10s
+    exporters:
+      debug:
+      otlp:
+        endpoint: "ingest.in.signoz.cloud:443"
+        tls:
+          insecure: false
+        timeout: 20s
+        headers:
+          "signoz-ingestion-key": "<token>"
+    service:
+      pipelines:
+        metrics:
+          receivers: [k8s_cluster]
+          exporters: [debug, otlp]
+        logs/entity_events:
+          receivers: [k8s_cluster]
+          exporters: [debug, otlp]

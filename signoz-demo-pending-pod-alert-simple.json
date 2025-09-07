@@ -1,0 +1,98 @@
+{
+  "name": "Pod Stuck in Pending - signoz-demo Namespace",
+  "description": "Alert when a pod in signoz-demo namespace is stuck in pending state for over 5 minutes",
+  "condition": {
+    "query": {
+      "builder": {
+        "queryData": [
+          {
+            "aggregateAttribute": {
+              "dataType": "float64",
+              "id": "k8s.pod.phase--float64----true",
+              "isColumn": true,
+              "key": "k8s.pod.phase",
+              "type": ""
+            },
+            "aggregateOperator": "avg",
+            "dataSource": "metrics",
+            "disabled": false,
+            "expression": "A",
+            "filters": {
+              "items": [
+                {
+                  "id": "namespace-filter",
+                  "key": {
+                    "dataType": "string",
+                    "id": "k8s.namespace.name--string--tag--false",
+                    "isColumn": false,
+                    "key": "k8s.namespace.name",
+                    "type": "tag"
+                  },
+                  "op": "=",
+                  "value": "signoz-demo"
+                },
+                {
+                  "id": "phase-filter",
+                  "key": {
+                    "dataType": "string",
+                    "id": "k8s.pod.phase--string--tag--false",
+                    "isColumn": false,
+                    "key": "k8s.pod.phase",
+                    "type": "tag"
+                  },
+                  "op": "=",
+                  "value": "1"
+                }
+              ],
+              "op": "AND"
+            },
+            "groupBy": [
+              {
+                "dataType": "string",
+                "id": "k8s.pod.name--string--tag--false",
+                "isColumn": false,
+                "key": "k8s.pod.name",
+                "type": "tag"
+              }
+            ],
+            "having": [],
+            "legend": "{{k8s.pod.name}}",
+            "limit": null,
+            "orderBy": [],
+            "queryName": "A",
+            "reduceTo": "sum",
+            "spaceAggregation": "sum",
+            "stepInterval": 10,
+            "timeAggregation": "avg"
+          }
+        ],
+        "queryFormulas": []
+      },
+      "queryType": "builder"
+    },
+    "threshold": {
+      "value": 0,
+      "operator": ">"
+    },
+    "evaluationWindow": "5m",
+    "frequency": "1m"
+  },
+  "notification": {
+    "channels": [
+      {
+        "type": "slack",
+        "webhook_url": "https://hooks.slack.com/services/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",
+        "message": "🚨 **Pod Stuck in Pending Alert**\n\n**Namespace:** signoz-demo\n**Pod:** {{.k8s.pod.name}}\n**Duration:** Over 5 minutes\n**Status:** Pending\n**Time:** {{.timestamp}}\n\nPlease check the pod status and resolve the scheduling issue.",
+        "title": "Pod Stuck in Pending - signoz-demo"
+      }
+    ]
+  },
+  "severity": "critical",
+  "tags": [
+    "k8s",
+    "pod",
+    "pending",
+    "signoz-demo",
+    "alert"
+  ]
+}

@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: test-pending-pod
+  namespace: signoz-demo
+  labels:
+    app: test-pending-pod
+spec:
+  containers:
+  - name: test-container
+    image: nginx:latest
+    resources:
+      requests:
+        cpu: "1000"
+        memory: "2Gi"
+      limits:
+        cpu: "1000"
+        memory: "2Gi"
+  nodeSelector:
+    non-existent-node: "true"
